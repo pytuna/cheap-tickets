@@ -1,9 +1,13 @@
-const multer = require("multer")
+const multer = require("multer");
+const mkdirp = require('mkdirp');
 
-function uploadImage(imageName = ''){
+function uploadImage(type = '', imageName = ''){
+
+    const made = mkdirp.sync(`./src/public/uploads/${type}`)
+
     const storage = multer.diskStorage({
         destination: function(req, file, cb){
-            cb(null, './src/public/uploads/avatars')
+            cb(null, `./src/public/uploads/${type}`)
         },
         filename: function(req, file, cb){
             const uniqueSuffix = Date.now() + '-' + imageName
@@ -24,7 +28,7 @@ function uploadImage(imageName = ''){
     }
     
     const upload_Image = multer({storage: storage, fileFilter: fileFilter, limits: {fileSize: 132721}})
-    return upload_Image
+    return upload_Image.single(type)
 }
 
 

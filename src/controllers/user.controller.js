@@ -72,7 +72,7 @@ class UserController{
             }
             if(user.avatar_path){
                 const filename_avatar = user.avatar_path.split('/').at(-1)
-                const pathImg = path.join(public_path, 'uploads', 'avatars', filename_avatar)
+                const pathImg = path.join(public_path, 'uploads', 'avatar', filename_avatar)
                 try {
                     await fs.unlink(pathImg);
                 } catch (error) {
@@ -80,7 +80,7 @@ class UserController{
                 }
                 
             }
-            const uploadImg = uploadImage(user.name).single("avatar");
+            const uploadImg = uploadImage('avatar',user.name);
             
             uploadImg(req, res, async(err)=>{
                 
@@ -93,9 +93,7 @@ class UserController{
                         const {host} = req.headers
                         const {filename} = req.file
                         
-                        
-                        
-                        user.avatar_path = host+"/uploads/avatars/"+filename
+                        user.avatar_path = host+"/uploads/avatar/"+filename
                         await user.save();
                         res.status(200).json(user)
                     } catch (error) {
